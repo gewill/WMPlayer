@@ -11,7 +11,7 @@
  Copyright © 2016年 郑文明. All rights reserved.
  */
 #import <Masonry/Masonry.h>
-
+#import "FullViewController.h"
 
 #import "WMPlayer.h"
 #import "WMLightView.h"
@@ -82,6 +82,12 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 @property (nonatomic,strong) UISlider       *volumeSlider;
 //显示缓冲进度
 @property (nonatomic,strong) UIProgressView *loadingProgress;
+
+
+/* 全屏控制器 */
+@property(nonatomic, strong) FullViewController *fullVC;
+@property(strong, nonatomic) UIView *currentSuperView;
+@property(assign, nonatomic) CGRect originFrame;
 
 
 @end
@@ -489,9 +495,36 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         [self.delegate wmplayer:self clickedFullScreenButton:sender];
     }
 }
+
+- (void)showPlayerInFullScreenVC {
+    self.isFullscreen = YES;
+    self.currentSuperView = self.superview;
+    self.originFrame = self.frame;
+    
+    [self.contrainerViewController
+     presentViewController:self.fullVC
+     animated:NO
+     completion:^{
+         [self.fullVC.view addSubview:self];
+         self.center = self.fullVC.view.center;
+         self.frame = self.fullVC.view.bounds;
+         [self hideControls:NO];
+         self.mute = NO;
+     }];
+    
+}
+
 #pragma mark
 #pragma mark - 关闭按钮点击func
 -(void)colseTheVideo:(UIButton *)sender{
+    [self hideControls:YES];
+    self.mute = YES;
+
+    [self.fullVC dismissViewControllerAnimated:NO completion:^{
+        [self.currentSuperView addSubview:self];
+        self.frame = self.originFrame;
+        
+    }];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedCloseButton:)]) {
         [self.delegate wmplayer:self clickedCloseButton:sender];
     }
@@ -567,26 +600,32 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 #pragma mark
 #pragma mark - 单击手势方法
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender{
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(autoDismissBottomView:) object:nil];
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:singleTaped:)]) {
-        [self.delegate wmplayer:self singleTaped:sender];
-    }
     
-    
-   
-    [self.autoDismissTimer invalidate];
-    self.autoDismissTimer = nil;
-    self.autoDismissTimer = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(autoDismissBottomView:) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:self.autoDismissTimer forMode:NSDefaultRunLoopMode];
-    [UIView animateWithDuration:0.5 animations:^{
-        if (self.bottomView.alpha == 0.0) {
-            [self showControlView];
-        }else{
-            [self hiddenControlView];
-        }
-    } completion:^(BOOL finish){
+    if (self.isFullscreen == YES) {
         
-    }];
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(autoDismissBottomView:) object:nil];
+        if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:singleTaped:)]) {
+            [self.delegate wmplayer:self singleTaped:sender];
+        }
+        
+        
+        
+        [self.autoDismissTimer invalidate];
+        self.autoDismissTimer = nil;
+        self.autoDismissTimer = [NSTimer timerWithTimeInterval:5.0 target:self selector:@selector(autoDismissBottomView:) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:self.autoDismissTimer forMode:NSDefaultRunLoopMode];
+        [UIView animateWithDuration:0.5 animations:^{
+            if (self.bottomView.alpha == 0.0) {
+                [self showControlView];
+            }else{
+                [self hiddenControlView];
+            }
+        } completion:^(BOOL finish){
+            
+        }];
+    } else {
+        [self showPlayerInFullScreenVC];
+    }
 }
 #pragma mark
 #pragma mark - 双击手势方法
@@ -784,6 +823,12 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         
     }];
 }
+
+- (void)hideControls:(BOOL)isHidden {
+    [self.bottomView setHidden:isHidden];
+    [self.topView setHidden:isHidden];
+}
+
 #pragma mark
 #pragma mark--开始拖曳sidle
 - (void)stratDragSlide:(UISlider *)slider{
@@ -854,6 +899,8 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                     if (self.seekTime) {
                         [self seekToTimeToPlay:self.seekTime];
                     }
+                    
+                    self.player.muted = self.mute;
                     
                 }
                     break;
@@ -1341,4 +1388,19 @@ NSString * calculateTimeWithTimeFormatter(long long timeSecond){
 - (NSString *)version{
     return @"3.0.0";
 }
+
+#pragma mark - getter and setter
+
+-(void)setMute:(BOOL)mute{
+    _mute = mute;
+    self.player.muted = mute;
+}
+
+- (FullViewController *)fullVC {
+    if (_fullVC == nil) {
+        _fullVC = [[FullViewController alloc] init];
+    }
+    return _fullVC;
+}
+
 @end

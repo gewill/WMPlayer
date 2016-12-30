@@ -94,6 +94,10 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
 
 /** 播放器的代理 */
 @property (nonatomic, weak)id <WMPlayerDelegate> delegate;
+
+/* 包含在哪一个控制器中 */
+@property(nonatomic, weak) UIViewController *contrainerViewController;
+
 /**
  *  底部操作工具栏
  */
@@ -182,6 +186,12 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
 /** 播放前占位图片，不设置就显示默认占位图（需要在设置视频URL之前设置） */
 @property (nonatomic, copy  ) UIImage              *placeholderImage ;
 
+/**
+ * Mute.
+ * 静音
+ */
+@property(nonatomic, assign)BOOL mute;
+
 
 
 ///---------------------------------------------------
@@ -214,5 +224,8 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
 - (NSString *)version;
 //获取当前的旋转状态
 +(CGAffineTransform)getCurrentDeviceOrientation;
+
+
+- (void)hideControls:(BOOL)isHidden;
 @end
 
