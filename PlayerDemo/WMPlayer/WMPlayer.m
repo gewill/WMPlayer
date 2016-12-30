@@ -172,7 +172,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     
     //topView
     self.topView = [[UIImageView alloc]init];
-    self.topView.image = WMPlayerImage(@"top_shadow");
+//    self.topView.image = WMPlayerImage(@"top_shadow");
     self.topView.userInteractionEnabled = YES;
 //    self.topView.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.4];
     [self.contentView addSubview:self.topView];
@@ -180,14 +180,14 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView).with.offset(0);
         make.right.equalTo(self.contentView).with.offset(0);
-        make.height.mas_equalTo(70);
+        make.height.mas_equalTo(44);
         make.top.equalTo(self.contentView).with.offset(0);
     }];
     
     
     //bottomView
     self.bottomView = [[UIImageView alloc]init];
-    self.bottomView.image = WMPlayerImage(@"bottom_shadow");
+//    self.bottomView.image = WMPlayerImage(@"bottom_shadow");
     self.bottomView.userInteractionEnabled = YES;
 //    self.bottomView.backgroundColor = [UIColor colorWithWhite:0.4 alpha:0.4];
     [self.contentView addSubview:self.bottomView];
@@ -197,7 +197,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView).with.offset(0);
         make.right.equalTo(self.contentView).with.offset(0);
-        make.height.mas_equalTo(50);
+        make.height.mas_equalTo(44);
         make.bottom.equalTo(self.contentView).with.offset(0);
         
     }];
@@ -215,10 +215,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     //autoLayout _playOrPauseBtn
     [self.playOrPauseBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.bottomView).with.offset(0);
-        make.height.mas_equalTo(50);
-        make.bottom.equalTo(self.bottomView).with.offset(0);
-        make.width.mas_equalTo(50);
-        
+        make.height.mas_equalTo(44);
+        make.width.mas_equalTo(44);
+        make.centerY.mas_equalTo(self.bottomView.mas_centerY);
     }];
     self.playOrPauseBtn.selected = YES;//默认状态，即默认是不自动播放
     
@@ -231,71 +230,21 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     }
     
     
-    
-    
-    
-    //slider
-    self.progressSlider = [[UISlider alloc]init];
-    self.progressSlider.minimumValue = 0.0;
-    self.progressSlider.maximumValue = 1.0;
-
-    [self.progressSlider setThumbImage:WMPlayerImage(@"dot")  forState:UIControlStateNormal];
-    self.progressSlider.minimumTrackTintColor = [UIColor greenColor];
-    self.progressSlider.maximumTrackTintColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
-
-    self.progressSlider.value = 0.0;//指定初始值
-    //进度条的拖拽事件
-    [self.progressSlider addTarget:self action:@selector(stratDragSlide:)  forControlEvents:UIControlEventValueChanged];
-    //进度条的点击事件
-    [self.progressSlider addTarget:self action:@selector(updateProgress:) forControlEvents:UIControlEventTouchUpInside];
-    
-    //给进度条添加单击手势
-    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTapGesture:)];
-    self.tap.delegate = self;
-    [self.progressSlider addGestureRecognizer:self.tap];
-    [self.bottomView addSubview:self.progressSlider];
-    self.progressSlider.backgroundColor = [UIColor clearColor];
-    //autoLayout slider
-    [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bottomView).with.offset(45);
-        make.right.equalTo(self.bottomView).with.offset(-45);
-        make.centerY.equalTo(self.bottomView.mas_centerY).offset(-1);
-        make.height.mas_equalTo(30);
-    }];
-    
-
-    self.loadingProgress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-    self.loadingProgress.progressTintColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
-    self.loadingProgress.trackTintColor    = [UIColor clearColor];
-    [self.bottomView addSubview:self.loadingProgress];
-    [self.loadingProgress setProgress:0.0 animated:NO];
-
-    
-    [self.loadingProgress mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bottomView).with.offset(45);
-        make.right.equalTo(self.bottomView).with.offset(-45);
-        make.centerY.equalTo(self.bottomView.mas_centerY);
-    }];
-    
-    
-    [self.bottomView sendSubviewToBack:self.loadingProgress];
-    
-    
     //_fullScreenBtn
-    self.fullScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.fullScreenBtn.showsTouchWhenHighlighted = YES;
-    [self.fullScreenBtn addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.fullScreenBtn setImage:WMPlayerImage(@"fullscreen") forState:UIControlStateNormal];
-    [self.fullScreenBtn setImage:WMPlayerImage(@"nonfullscreen") forState:UIControlStateSelected];
-    [self.bottomView addSubview:self.fullScreenBtn];
-    //autoLayout fullScreenBtn
-    [self.fullScreenBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.bottomView).with.offset(0);
-        make.height.mas_equalTo(50);
-        make.bottom.equalTo(self.bottomView).with.offset(0);
-        make.width.mas_equalTo(50);
-        
-    }];
+//    self.fullScreenBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    self.fullScreenBtn.showsTouchWhenHighlighted = YES;
+//    [self.fullScreenBtn addTarget:self action:@selector(fullScreenAction:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.fullScreenBtn setImage:WMPlayerImage(@"fullscreen") forState:UIControlStateNormal];
+//    [self.fullScreenBtn setImage:WMPlayerImage(@"nonfullscreen") forState:UIControlStateSelected];
+//    [self.bottomView addSubview:self.fullScreenBtn];
+//    //autoLayout fullScreenBtn
+//    [self.fullScreenBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.right.equalTo(self.bottomView).with.offset(0);
+//        make.height.mas_equalTo(50);
+//        make.bottom.equalTo(self.bottomView).with.offset(0);
+//        make.width.mas_equalTo(50);
+//        
+//    }];
     
     
     
@@ -310,10 +259,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.bottomView addSubview:self.leftTimeLabel];
     //autoLayout timeLabel
     [self.leftTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bottomView).with.offset(45);
-        make.right.equalTo(self.bottomView).with.offset(-45);
+        make.leading.equalTo(self.playOrPauseBtn.mas_trailing).with.offset(0);
         make.height.mas_equalTo(20);
-        make.bottom.equalTo(self.bottomView).with.offset(0);
+        make.centerY.equalTo(self.bottomView.mas_centerY);
     }];
     self.leftTimeLabel.text = [self convertTime:0.0];//设置默认值
     
@@ -326,26 +274,72 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [self.bottomView addSubview:self.rightTimeLabel];
     //autoLayout timeLabel
     [self.rightTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.bottomView).with.offset(45);
-        make.right.equalTo(self.bottomView).with.offset(-45);
+        make.right.equalTo(self.bottomView).with.offset(-16);
         make.height.mas_equalTo(20);
-        make.bottom.equalTo(self.bottomView).with.offset(0);
+        make.centerY.equalTo(self.bottomView.mas_centerY);
     }];
     self.rightTimeLabel.text = [self convertTime:0.0];//设置默认值
 
+    //slider
+    self.progressSlider = [[UISlider alloc]init];
+    self.progressSlider.minimumValue = 0.0;
+    self.progressSlider.maximumValue = 1.0;
+    
+    [self.progressSlider setThumbImage:WMPlayerImage(@"dot")  forState:UIControlStateNormal];
+    self.progressSlider.minimumTrackTintColor =  [UIColor colorWithRed:249.0 / 255.0 green:168.0 / 255.0 blue:11.0 / 255.0 alpha:1.0];
+    self.progressSlider.maximumTrackTintColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+    
+    self.progressSlider.value = 0.0;//指定初始值
+    //进度条的拖拽事件
+    [self.progressSlider addTarget:self action:@selector(stratDragSlide:)  forControlEvents:UIControlEventValueChanged];
+    //进度条的点击事件
+    [self.progressSlider addTarget:self action:@selector(updateProgress:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //给进度条添加单击手势
+    self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTapGesture:)];
+    self.tap.delegate = self;
+    [self.progressSlider addGestureRecognizer:self.tap];
+    [self.bottomView addSubview:self.progressSlider];
+    self.progressSlider.backgroundColor = [UIColor clearColor];
+    //autoLayout slider
+    [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.leftTimeLabel.mas_trailing).with.offset(8);
+        make.trailing.equalTo(self.rightTimeLabel.mas_leading).with.offset(-8);
+        make.centerY.equalTo(self.bottomView.mas_centerY).offset(-1);
+        make.height.mas_equalTo(30);
+    }];
+    
+    
+    self.loadingProgress = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    self.loadingProgress.progressTintColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
+    self.loadingProgress.trackTintColor    = [UIColor clearColor];
+    [self.bottomView addSubview:self.loadingProgress];
+    [self.loadingProgress setProgress:0.0 animated:NO];
+    
+    
+    [self.loadingProgress mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.equalTo(self.leftTimeLabel.mas_trailing).with.offset(8);
+        make.trailing.equalTo(self.rightTimeLabel.mas_leading).with.offset(-8);
+        make.centerY.equalTo(self.bottomView.mas_centerY);
+    }];
+    
+    
+    [self.bottomView sendSubviewToBack:self.loadingProgress];
+    
     
     //_closeBtn
     _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _closeBtn.showsTouchWhenHighlighted = YES;
+    _closeBtn.clipsToBounds = YES;
 //    _closeBtn.backgroundColor = [UIColor redColor];
     [_closeBtn addTarget:self action:@selector(colseTheVideo:) forControlEvents:UIControlEventTouchUpInside];
        [self.topView addSubview:_closeBtn];
     //autoLayout _closeBtn
     [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.topView).with.offset(5);
+        make.left.equalTo(self.topView).with.offset(8);
         make.height.mas_equalTo(30);
         make.width.mas_equalTo(30);
-        make.top.equalTo(self.topView).with.offset(20);
+        make.centerY.equalTo(self.topView.mas_centerY);
         
     }];
     
@@ -355,16 +349,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.numberOfLines = 1;
-    self.titleLabel.font = [UIFont systemFontOfSize:15.0];
+    self.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.topView addSubview:self.titleLabel];
     //autoLayout titleLabel
     
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.topView).with.offset(45);
-        make.right.equalTo(self.topView).with.offset(-45);
+        make.leading.equalTo(self.closeBtn.mas_trailing).with.offset(8);
+        make.right.equalTo(self.topView).with.offset(-46);
         make.center.equalTo(self.topView);
-        make.top.equalTo(self.topView).with.offset(0);
-
     }];
     
     // 单击的 Recognizer
@@ -489,14 +482,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 }
 #pragma mark
 #pragma mark - 全屏按钮点击func
--(void)fullScreenAction:(UIButton *)sender{
-    sender.selected = !sender.selected;
-    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedFullScreenButton:)]) {
-        [self.delegate wmplayer:self clickedFullScreenButton:sender];
-    }
-}
+//-(void)fullScreenAction:(UIButton *)sender{
+//    sender.selected = !sender.selected;
+//    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedFullScreenButton:)]) {
+//        [self.delegate wmplayer:self clickedFullScreenButton:sender];
+//    }
+//}
 
 - (void)showPlayerInFullScreenVC {
+    
     self.isFullscreen = YES;
     self.currentSuperView = self.superview;
     self.originFrame = self.frame;
@@ -517,6 +511,8 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 #pragma mark
 #pragma mark - 关闭按钮点击func
 -(void)colseTheVideo:(UIButton *)sender{
+    
+    self.isFullscreen = NO;
     [self hideControls:YES];
     self.mute = YES;
 

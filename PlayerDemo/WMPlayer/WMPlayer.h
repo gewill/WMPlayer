@@ -134,10 +134,10 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
  *  BOOL值判断当前的状态
  */
 @property (nonatomic,assign ) BOOL            isFullscreen;
-/**
- *  控制全屏的按钮
- */
-@property (nonatomic,retain ) UIButton       *fullScreenBtn;
+///**
+// *  控制全屏的按钮
+// */
+//@property (nonatomic,retain ) UIButton       *fullScreenBtn;
 /**
  *  播放暂停按钮
  */

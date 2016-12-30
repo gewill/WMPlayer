@@ -335,6 +335,7 @@
         [wmPlayer hideControls:YES];
         wmPlayer.dragEnable = NO;
         wmPlayer.mute = YES;
+        wmPlayer.closeBtnStyle = CloseBtnStylePop;
         wmPlayer.enableVolumeGesture = NO;
         wmPlayer.URLString = model.mp4_url;
         wmPlayer.titleLabel.text = model.title;
@@ -347,6 +348,7 @@
         [wmPlayer hideControls:YES];
         wmPlayer.dragEnable = NO;
         wmPlayer.mute = YES;
+        wmPlayer.closeBtnStyle = CloseBtnStylePop;
         wmPlayer.enableVolumeGesture = NO;
         wmPlayer.titleLabel.text = model.title;
         wmPlayer.URLString = model.mp4_url;
@@ -423,7 +425,7 @@
         wmPlayer.isFullscreen = NO;
         [self setNeedsStatusBarAppearanceUpdate];
         isSmallScreen = NO;
-        wmPlayer.fullScreenBtn.selected = NO;
+//        wmPlayer.fullScreenBtn.selected = NO;
         wmPlayer.FF_View.hidden = YES;
     }];
     
@@ -501,7 +503,7 @@
     
     [self.view addSubview:wmPlayer];
     [[UIApplication sharedApplication].keyWindow addSubview:wmPlayer];
-    wmPlayer.fullScreenBtn.selected = YES;
+//    wmPlayer.fullScreenBtn.selected = YES;
     wmPlayer.isFullscreen = YES;
     wmPlayer.FF_View.hidden = YES;
 }
