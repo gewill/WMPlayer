@@ -379,7 +379,17 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appwillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    //获取设备旋转方向的通知,即使关闭了自动旋转,一样可以监测到设备的旋转方向
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    //旋转屏幕通知
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onDeviceOrientationChange:)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil
+     ];
+
 }
 #pragma mark
 #pragma mark lazy 加载失败的label
@@ -481,7 +491,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.playerLayer.frame = self.bounds;
 }
 #pragma mark
-#pragma mark - 全屏按钮点击func
+#pragma mark - 全屏按钮 和旋转屏幕
 //-(void)fullScreenAction:(UIButton *)sender{
 //    sender.selected = !sender.selected;
 //    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedFullScreenButton:)]) {
@@ -500,13 +510,102 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
      animated:NO
      completion:^{
          [self.fullVC.view addSubview:self];
-         self.center = self.fullVC.view.center;
-         self.frame = self.fullVC.view.bounds;
+//         self.center = self.fullVC.view.center;
+//         self.frame = self.fullVC.view.bounds;
+         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+             make.edges.equalTo(self.superview);
+             make.center.equalTo(self.superview);
+         }];
          [self hideControls:NO];
          self.mute = NO;
      }];
     
 }
+
+
+/**
+ *  旋转屏幕通知
+ */
+- (void)onDeviceOrientationChange:(NSNotification *)notification{
+    
+    if (self.isFullscreen == NO) {
+        return;
+    }
+    
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    UIInterfaceOrientation interfaceOrientation = (UIInterfaceOrientation)orientation;
+
+
+    switch (interfaceOrientation) {
+        case UIInterfaceOrientationPortraitUpsideDown:{
+            NSLog(@"第3个旋转方向---电池栏在下");
+        }
+            break;
+        case UIInterfaceOrientationPortrait:{
+            NSLog(@"第0个旋转方向---电池栏在上");
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.superview);
+                make.center.equalTo(self.superview);
+            }];
+            [self transformPlayer: interfaceOrientation];
+        }
+            break;
+        case UIInterfaceOrientationLandscapeLeft:{
+            NSLog(@"第2个旋转方向---电池栏在左");
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@([UIScreen mainScreen].bounds.size.height));
+                make.height.equalTo(@([UIScreen mainScreen].bounds.size.width));
+                make.center.equalTo(self.superview);
+            }];
+            [self transformPlayer: interfaceOrientation];
+        }
+            break;
+        case UIInterfaceOrientationLandscapeRight:{
+            NSLog(@"第1个旋转方向---电池栏在右");
+            [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.width.equalTo(@([UIScreen mainScreen].bounds.size.height));
+                make.height.equalTo(@([UIScreen mainScreen].bounds.size.width));
+                make.center.equalTo(self.superview);
+            }];
+            [self transformPlayer: interfaceOrientation];
+        }
+            break;
+        default:
+            break;
+    }
+    
+}
+
+- (void)transformPlayer:(UIInterfaceOrientation)orientation {
+    //iOS6.0之后,设置状态条的方法能使用的前提是shouldAutorotate为NO,也就是说这个视图控制器内,旋转要关掉;
+    //也就是说在实现这个方法的时候-(BOOL)shouldAutorotate返回值要为NO
+    [[UIApplication sharedApplication] setStatusBarOrientation:orientation animated:NO];
+    //获取旋转状态条需要的时间:
+    [UIView beginAnimations:nil context:nil];
+    //更改了状态条的方向,但是设备方向UIInterfaceOrientation还是正方向的,这就要设置给你播放视频的视图的方向设置旋转
+    //给你的播放视频的view视图设置旋转
+    self.transform = CGAffineTransformIdentity;
+    self.transform = [self getTransformWithDeviceOrientation:orientation];
+    [UIView setAnimationDuration:2.0];
+    //开始旋转
+    [UIView commitAnimations];
+
+}
+
+- (CGAffineTransform)getTransformWithDeviceOrientation: (UIInterfaceOrientation)orientation {
+
+    //根据要进行旋转的方向来计算旋转的角度
+    if (orientation ==UIInterfaceOrientationPortrait) {
+        return CGAffineTransformIdentity;
+    }else if (orientation ==UIInterfaceOrientationLandscapeLeft){
+        return CGAffineTransformMakeRotation(-M_PI_2);
+    }else if(orientation ==UIInterfaceOrientationLandscapeRight){
+        return CGAffineTransformMakeRotation(M_PI_2);
+    }
+    return CGAffineTransformIdentity;
+}
+
+
 
 #pragma mark
 #pragma mark - 关闭按钮点击func
@@ -515,10 +614,14 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.isFullscreen = NO;
     [self hideControls:YES];
     self.mute = YES;
+    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+        
+    }];
 
     [self.fullVC dismissViewControllerAnimated:NO completion:^{
         [self.currentSuperView addSubview:self];
         self.frame = self.originFrame;
+        self.center = self.currentSuperView.center;
         
     }];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedCloseButton:)]) {

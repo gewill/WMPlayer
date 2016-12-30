@@ -71,13 +71,13 @@
     
     [self.table registerNib:[UINib nibWithNibName:@"VideoCell" bundle:nil] forCellReuseIdentifier:@"VideoCell"];
     [self addMJRefresh];
+    
+    [self performSelector:@selector(loadData) withObject:nil afterDelay:1.0];
 }
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    
-
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:1.0];
 }
+
 -(void)loadData{
     [dataSource addObjectsFromArray:[AppDelegate shareAppDelegate].videoArray];
     [self.table reloadData];
@@ -188,14 +188,6 @@
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    VideoModel *   model = [dataSource objectAtIndex:indexPath.row];
-    
-    DetailViewController *detailVC = [[DetailViewController alloc]init];
-    detailVC.URLString  = model.m3u8_url;
-    detailVC.title = model.title;
-    //    detailVC.URLString = model.mp4_url;
-    [self.navigationController pushViewController:detailVC animated:YES];
 
 }
 
@@ -203,10 +195,7 @@
 ///播放器事件
 -(void)wmplayer:(WMPlayer *)wmplayer clickedCloseButton:(UIButton *)closeBtn{
     NSLog(@"didClickedCloseButton");
-//    VideoCell *currentCell = (VideoCell *)[self.table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:currentIndexPath.row inSection:0]];
-//    [currentCell.playBtn.superview bringSubviewToFront:currentCell.playBtn];
-//    [self releaseWMPlayer];
-//    [self setNeedsStatusBarAppearanceUpdate];
+    [wmplayer play];
     
 }
 -(void)wmplayer:(WMPlayer *)wmplayer clickedFullScreenButton:(UIButton *)fullScreenBtn{

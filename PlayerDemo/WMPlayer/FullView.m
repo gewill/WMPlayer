@@ -7,13 +7,17 @@
 //
 
 #import "FullView.h"
+#import <Masonry/Masonry.h>
 
 @implementation FullView
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder]) {
-        self.autoresizesSubviews = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        [self mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.superview);
+            make.center.equalTo(self.superview);
+        }];;
         self.backgroundColor = [UIColor blackColor];
     }
     return self;

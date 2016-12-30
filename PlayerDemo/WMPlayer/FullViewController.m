@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
   [super viewDidLoad];
+    
 }
 
 - (void)dealloc {
@@ -43,7 +44,7 @@
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-  return UIInterfaceOrientationMaskPortrait;
+  return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:
@@ -54,5 +55,7 @@
 - (BOOL)prefersStatusBarHidden {
   return YES;
 }
+
+
 
 @end
