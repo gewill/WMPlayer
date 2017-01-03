@@ -195,19 +195,12 @@
 ///播放器事件
 -(void)wmplayer:(WMPlayer *)wmplayer clickedCloseButton:(UIButton *)closeBtn{
     NSLog(@"didClickedCloseButton");
-    [wmplayer play];
+//    [self toCell];
     
 }
 -(void)wmplayer:(WMPlayer *)wmplayer clickedFullScreenButton:(UIButton *)fullScreenBtn{
-    if (fullScreenBtn.isSelected) {//全屏显示
-        wmPlayer.isFullscreen = YES;
-        [self setNeedsStatusBarAppearanceUpdate];
-        [self toFullScreenWithInterfaceOrientation:UIInterfaceOrientationLandscapeLeft];
-    }else{
-        [self toCell];
-        
-    }
 }
+
 -(void)wmplayer:(WMPlayer *)wmplayer singleTaped:(UITapGestureRecognizer *)singleTap{
     NSLog(@"didSingleTaped");
 //    [self.table deselectRowAtIndexPath:currentIndexPath animated:YES];
@@ -248,6 +241,7 @@
 //规则是：当tableView滑动的时候，我会播放可见cell中，最靠近屏幕中心的那个cell的视频。
 -(void)handleScroll{
 
+    NSLog(@"handleScroll");
     // 找到下一个要播放的cell(最在屏幕中心的)
     VideoCell *finnalCell = nil;
     NSArray *visiableCells = [self.table visibleCells];
@@ -361,55 +355,61 @@
         wmPlayer.playerLayer.frame =  wmPlayer.bounds;
         [currentCell.backgroundIV addSubview:wmPlayer];
         [currentCell.backgroundIV bringSubviewToFront:wmPlayer];
-        [wmPlayer.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            
-            make.edges.equalTo(wmPlayer).with.offset(0);
-            make.width.mas_equalTo([UIScreen mainScreen].bounds.size.width);
-            make.height.mas_equalTo(wmPlayer.frame.size.height);
-            
-        }];
-        if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
-            wmPlayer.effectView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2-155/2, [UIScreen mainScreen].bounds.size.height/2-155/2, 155, 155);
-        }else{
-            //            wmPlayer.lightView.frame = CGRectMake(kScreenWidth/2-155/2, kScreenHeight/2-155/2, 155, 155);
-        }
         
-        [wmPlayer.FF_View  mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.center.mas_equalTo(CGPointMake([UIScreen mainScreen].bounds.size.width/2-180, wmPlayer.frame.size.height/2-144));
-            make.height.mas_equalTo(60);
-            make.width.mas_equalTo(120);
-            
+        [wmPlayer mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(currentCell.backgroundIV).with.offset(0);
         }];
         
-        [wmPlayer.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(wmPlayer).with.offset(0);
-            make.right.equalTo(wmPlayer).with.offset(0);
-            make.height.mas_equalTo(50);
-            make.bottom.equalTo(wmPlayer).with.offset(0);
-        }];
-        [wmPlayer.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(wmPlayer).with.offset(0);
-            make.right.equalTo(wmPlayer).with.offset(0);
-            make.height.mas_equalTo(70);
-            make.top.equalTo(wmPlayer).with.offset(0);
-        }];
-        [wmPlayer.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(wmPlayer.topView).with.offset(45);
-            make.right.equalTo(wmPlayer.topView).with.offset(-45);
-            make.center.equalTo(wmPlayer.topView);
-            make.top.equalTo(wmPlayer.topView).with.offset(0);
-        }];
-        [wmPlayer.closeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(wmPlayer).with.offset(5);
-            make.height.mas_equalTo(30);
-            make.width.mas_equalTo(30);
-            make.top.equalTo(wmPlayer).with.offset(20);
-        }];
-        [wmPlayer.loadFailedLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.center.equalTo(wmPlayer);
-            make.width.equalTo(wmPlayer);
-            make.height.equalTo(@30);
-        }];
+        
+//        [wmPlayer.contentView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            
+//            make.edges.equalTo(wmPlayer).with.offset(0);
+//            make.width.mas_equalTo([UIScreen mainScreen].bounds.size.width);
+//            make.height.mas_equalTo(wmPlayer.frame.size.height);
+//            
+//        }];
+//        if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
+//            wmPlayer.effectView.frame = CGRectMake([UIScreen mainScreen].bounds.size.width/2-155/2, [UIScreen mainScreen].bounds.size.height/2-155/2, 155, 155);
+//        }else{
+//            //            wmPlayer.lightView.frame = CGRectMake(kScreenWidth/2-155/2, kScreenHeight/2-155/2, 155, 155);
+//        }
+//        
+//        [wmPlayer.FF_View  mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.center.mas_equalTo(CGPointMake([UIScreen mainScreen].bounds.size.width/2-180, wmPlayer.frame.size.height/2-144));
+//            make.height.mas_equalTo(60);
+//            make.width.mas_equalTo(120);
+//            
+//        }];
+//        
+//        [wmPlayer.bottomView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(wmPlayer).with.offset(0);
+//            make.right.equalTo(wmPlayer).with.offset(0);
+//            make.height.mas_equalTo(50);
+//            make.bottom.equalTo(wmPlayer).with.offset(0);
+//        }];
+//        [wmPlayer.topView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(wmPlayer).with.offset(0);
+//            make.right.equalTo(wmPlayer).with.offset(0);
+//            make.height.mas_equalTo(70);
+//            make.top.equalTo(wmPlayer).with.offset(0);
+//        }];
+//        [wmPlayer.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(wmPlayer.topView).with.offset(45);
+//            make.right.equalTo(wmPlayer.topView).with.offset(-45);
+//            make.center.equalTo(wmPlayer.topView);
+//            make.top.equalTo(wmPlayer.topView).with.offset(0);
+//        }];
+//        [wmPlayer.closeBtn mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.left.equalTo(wmPlayer).with.offset(5);
+//            make.height.mas_equalTo(30);
+//            make.width.mas_equalTo(30);
+//            make.top.equalTo(wmPlayer).with.offset(20);
+//        }];
+//        [wmPlayer.loadFailedLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.center.equalTo(wmPlayer);
+//            make.width.equalTo(wmPlayer);
+//            make.height.equalTo(@30);
+//        }];
     }completion:^(BOOL finished) {
         wmPlayer.isFullscreen = NO;
         [self setNeedsStatusBarAppearanceUpdate];

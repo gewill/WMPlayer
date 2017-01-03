@@ -614,14 +614,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.isFullscreen = NO;
     [self hideControls:YES];
     self.mute = YES;
-    [self mas_remakeConstraints:^(MASConstraintMaker *make) {
-        
-    }];
 
     [self.fullVC dismissViewControllerAnimated:NO completion:^{
         [self.currentSuperView addSubview:self];
         self.frame = self.originFrame;
         self.center = self.currentSuperView.center;
+        [self mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.superview).with.offset(0);
+        }];
+
         
     }];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedCloseButton:)]) {
