@@ -571,7 +571,10 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
          }];
          [self hideControls:NO];
          self.mute = NO;
+         [self onDeviceOrientationChange:nil];
      }];
+    
+    
     
 }
 
@@ -678,7 +681,8 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         [self mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.superview).with.offset(0);
         }];
-
+        [self transformPlayer:UIInterfaceOrientationPortrait];
+        [self changeTitleLabelLayoutByIsFullscreen:NO];
         
     }];
     if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedCloseButton:)]) {
