@@ -351,14 +351,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.numberOfLines = 1;
     self.titleLabel.font = [UIFont systemFontOfSize:17.0];
-    self.titleLabel.textAlignment = NSTextAlignmentCenter;
     [self.topView addSubview:self.titleLabel];
     //autoLayout titleLabel
     
+    //居左
+    self.titleLabel.textAlignment = NSTextAlignmentLeft;
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.greaterThanOrEqualTo(self.topView.mas_leading).with.offset(46);
-        make.trailing.greaterThanOrEqualTo(self.topView.mas_trailing).with.offset(46);
-        make.center.equalTo(self.topView);
+        make.leading.equalTo(self.closeBtn.mas_trailing).with.offset(8);
+        make.trailing.equalTo(self.topView.mas_trailing).with.offset(-8);
+        make.centerY.equalTo(self.topView.mas_centerY);
     }];
     
     
@@ -600,6 +601,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 make.center.equalTo(self.superview);
             }];
             [self transformPlayer: interfaceOrientation];
+            [self changeTitleLabelLayoutByIsFullscreen:NO];
         }
             break;
         case UIInterfaceOrientationLandscapeLeft:{
@@ -610,6 +612,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 make.center.equalTo(self.superview);
             }];
             [self transformPlayer: interfaceOrientation];
+            [self changeTitleLabelLayoutByIsFullscreen:YES];
         }
             break;
         case UIInterfaceOrientationLandscapeRight:{
@@ -620,6 +623,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 make.center.equalTo(self.superview);
             }];
             [self transformPlayer: interfaceOrientation];
+            [self changeTitleLabelLayoutByIsFullscreen:YES];
         }
             break;
         default:
@@ -1524,6 +1528,25 @@ NSString * calculateTimeWithTimeFormatter(long long timeSecond){
         [self.contentView bringSubviewToFront:self.tipView];
     }
 }
+
+-(void)changeTitleLabelLayoutByIsFullscreen:(BOOL)isFullscreen{
+    if (isFullscreen == YES) {
+        self.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.leading.greaterThanOrEqualTo(self.topView.mas_leading).with.offset(46);
+            make.trailing.greaterThanOrEqualTo(self.topView.mas_trailing).with.offset(-8);
+            make.center.equalTo(self.topView);
+        }];
+    } else {
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+        [self.titleLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.leading.equalTo(self.closeBtn.mas_trailing).with.offset(8);
+            make.trailing.equalTo(self.topView.mas_trailing).with.offset(-8);
+            make.centerY.equalTo(self.topView.mas_centerY);
+        }];
+    }
+}
+
 
 
 //
