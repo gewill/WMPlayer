@@ -119,7 +119,6 @@
     switch (interfaceOrientation) {
         case UIInterfaceOrientationPortraitUpsideDown:{
             NSLog(@"第3个旋转方向---电池栏在下");
-            wmPlayer.isFullscreen = NO;
             self.enablePanGesture = NO;
         }
             break;

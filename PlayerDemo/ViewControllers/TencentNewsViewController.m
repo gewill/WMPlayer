@@ -226,12 +226,25 @@
 }
 -(void)wmplayerFinishedPlay:(WMPlayer *)wmplayer{
     NSLog(@"wmplayerDidFinishedPlay");
-    VideoCell *currentCell = (VideoCell *)[self.table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:currentIndexPath.row inSection:0]];
-    [currentCell.playBtn.superview bringSubviewToFront:currentCell.playBtn];
-    [self releaseWMPlayer];
-    [self setNeedsStatusBarAppearanceUpdate];
+//    VideoCell *currentCell = (VideoCell *)[self.table cellForRowAtIndexPath:[NSIndexPath indexPathForRow:currentIndexPath.row inSection:0]];
+//    [currentCell.playBtn.superview bringSubviewToFront:currentCell.playBtn];
+//    [self releaseWMPlayer];
+//    [self setNeedsStatusBarAppearanceUpdate];
 }
 
+///提示视图
+//点击重播按钮代理方法
+-(void)wmplayer:(WMPlayer *)wmplayer clickedReplayButton:(UIButton *)replayButton{
+    NSLog(@"%s",__FUNCTION__);
+}
+//点击点赞按钮代理方法
+-(void)wmplayer:(WMPlayer *)wmplayer clickedLikeButton:(UIButton *)likeButton{
+    NSLog(@"%s",__FUNCTION__);
+}
+//点击重试按钮代理方法
+-(void)wmplayer:(WMPlayer *)wmplayer clickedRetryButton:(UIButton *)retryButton{
+    NSLog(@"%s",__FUNCTION__);
+}
 
 
 
@@ -476,12 +489,7 @@
         make.top.equalTo(wmPlayer.topView).with.offset(0);
     }];
     
-    [wmPlayer.loadFailedLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(wmPlayer).with.offset(0);
-        make.top.equalTo(wmPlayer).with.offset([UIScreen mainScreen].bounds.size.width/2-30/2);
-        make.height.equalTo(@30);
-        make.width.mas_equalTo([UIScreen mainScreen].bounds.size.height);
-    }];
+
     
     [wmPlayer.loadingView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(wmPlayer).with.offset([UIScreen mainScreen].bounds.size.height/2-22/2);

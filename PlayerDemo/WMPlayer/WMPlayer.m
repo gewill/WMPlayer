@@ -12,6 +12,8 @@
  */
 #import <Masonry/Masonry.h>
 #import "FullViewController.h"
+#import "UIButton+WMPlayer.h"
+#import "AFNetworking.h"
 
 #import "WMPlayer.h"
 #import "WMLightView.h"
@@ -181,7 +183,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         make.left.equalTo(self.contentView).with.offset(0);
         make.right.equalTo(self.contentView).with.offset(0);
         make.height.mas_equalTo(44);
-        make.top.equalTo(self.contentView).with.offset(0);
+        make.top.equalTo(self.contentView.mas_top).with.offset(0);
     }];
     
     
@@ -345,7 +347,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     
     //titleLabel
     self.titleLabel = [[UILabel alloc]init];
-//    self.titleLabel.textAlignment = NSTextAlignmentCenter;
     self.titleLabel.textColor = [UIColor whiteColor];
     self.titleLabel.backgroundColor = [UIColor clearColor];
     self.titleLabel.numberOfLines = 1;
@@ -355,10 +356,79 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     //autoLayout titleLabel
     
     [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.closeBtn.mas_trailing).with.offset(8);
-        make.right.equalTo(self.topView).with.offset(-46);
+        make.leading.greaterThanOrEqualTo(self.topView.mas_leading).with.offset(46);
+        make.trailing.greaterThanOrEqualTo(self.topView.mas_trailing).with.offset(46);
         make.center.equalTo(self.topView);
     }];
+    
+    
+    // 提示视图
+    self.tipView = [[UIView alloc] init];
+    self.tipView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.6];
+    self.tipView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tipViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(colseTheVideo:)];
+    tipViewSingleTap.numberOfTapsRequired = 1;
+    tipViewSingleTap.numberOfTouchesRequired = 1;
+    [self.tipView addGestureRecognizer:tipViewSingleTap];
+    [self.contentView addSubview:self.tipView];
+    [self.tipView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.contentView);
+    }];
+    
+    self.tipTitleLabel = [[UILabel alloc] init];
+    self.tipTitleLabel.font = [UIFont systemFontOfSize:14];
+    self.tipTitleLabel.textColor = [UIColor whiteColor];
+    self.tipTitleLabel.textAlignment = NSTextAlignmentCenter;
+    [self.tipView addSubview:self.tipTitleLabel];
+    [self.tipTitleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tipView.mas_centerX);
+        make.centerY.equalTo(self.tipView.mas_centerY).with.offset(-80);
+        make.leading.greaterThanOrEqualTo(self.tipView.mas_leading).with.offset(14);
+        make.trailing.greaterThanOrEqualTo(self.tipView.mas_trailing).with.offset(14);
+    }];
+    
+    self.replayButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [self.replayButton setImage:WMPlayerImage(@"end_replay") forState:UIControlStateNormal];
+    [self.replayButton setTitle:@"重播" forState:UIControlStateNormal];
+    [self.replayButton setTintColor:[UIColor whiteColor]];
+    self.replayButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.replayButton addTarget:self action:@selector(replayButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tipView addSubview:self.replayButton];
+    [self.replayButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tipView.mas_centerX).with.offset(-33);
+        make.centerY.equalTo(self.tipView.mas_centerY);
+    }];
+    [self.replayButton centerVertically];
+    
+    self.likeButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [self.likeButton setImage:WMPlayerImage(@"end_like") forState:UIControlStateNormal];
+    [self.likeButton setTitle:@"点赞" forState:UIControlStateNormal];
+    [self.likeButton setTintColor:[UIColor whiteColor]];
+    self.likeButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.likeButton addTarget:self action:@selector(likeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tipView addSubview:self.likeButton];
+    [self.likeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tipView.mas_centerX).with.offset(33);
+        make.centerY.equalTo(self.tipView.mas_centerY);
+    }];
+    [self.likeButton centerVertically];
+    
+    self.retryButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [self.retryButton setImage:WMPlayerImage(@"end_replay") forState:UIControlStateNormal];
+    [self.retryButton setTitle:@"重试" forState:UIControlStateNormal];
+    [self.retryButton setTintColor:[UIColor whiteColor]];
+    self.retryButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [self.retryButton addTarget:self action:@selector(retryButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.tipView addSubview:self.retryButton];
+    [self.retryButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.tipView.mas_centerX);
+        make.centerY.equalTo(self.tipView.mas_centerY);
+    }];
+    [self.retryButton centerVertically];
+    
+    [self hideRetryView:YES];
+    [self hideReplayView:YES];
+
     
     // 单击的 Recognizer
     singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
@@ -376,6 +446,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     [singleTap requireGestureRecognizerToFail:doubleTap];//如果双击成立，则取消单击手势（双击的时候不回走单击事件）
     [self.contentView addGestureRecognizer:doubleTap];
     
+    // 监测网络变化
+    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appwillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -390,27 +463,6 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                                                object:nil
      ];
 
-}
-#pragma mark
-#pragma mark lazy 加载失败的label
--(UILabel *)loadFailedLabel{
-    if (_loadFailedLabel==nil) {
-        _loadFailedLabel = [[UILabel alloc]init];
-        _loadFailedLabel.backgroundColor = [UIColor clearColor];
-        _loadFailedLabel.textColor = [UIColor whiteColor];
-        _loadFailedLabel.textAlignment = NSTextAlignmentCenter;
-        _loadFailedLabel.text = @"视频加载失败";
-        _loadFailedLabel.hidden = YES;
-        [self.contentView addSubview:_loadFailedLabel];
-
-        [_loadFailedLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.center.equalTo(self.contentView);
-            make.width.equalTo(self.contentView);
-            make.height.equalTo(@30);
-
-        }];
-    }
-    return _loadFailedLabel;
 }
 #pragma mark
 #pragma mark 进入后台
@@ -654,6 +706,34 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 
     });
 }
+
+#pragma mark - 提示视图响应方法
+
+-(void)replayButtonClick:(UIButton *)sender{
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedReplayButton:)]) {
+        [self.delegate wmplayer:self clickedReplayButton:sender];
+    }
+    [self play];
+    [self hideReplayView:YES];
+}
+
+-(void)likeButtonClick:(UIButton *)sender{
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedLikeButton:)]) {
+        [self.delegate wmplayer:self clickedLikeButton:sender];
+    }
+}
+
+
+-(void)retryButtonClick:(UIButton *)sender{
+    if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayer:clickedRetryButton:)]) {
+        [self.delegate wmplayer:self clickedRetryButton:sender];
+    }
+    [self play];
+    [self hideRetryView:YES];
+}
+
+
+
 #pragma mark
 #pragma mark - PlayOrPause
 - (void)PlayOrPause:(UIButton *)sender{
@@ -679,13 +759,14 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
         [self.player play];
         self.playOrPauseBtn.selected = NO;
     }else{
-        if (self.state==WMPlayerStateStopped||self.state ==WMPlayerStatePause) {
-            self.state = WMPlayerStatePlaying;
+        if(self.state ==WMPlayerStateFinished){
+            [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {}];
             [self.player play];
             self.playOrPauseBtn.selected = NO;
-        }else if(self.state ==WMPlayerStateFinished){
-            NSLog(@"fffff");
         }
+        self.state = WMPlayerStatePlaying;
+        [self.player play];
+        self.playOrPauseBtn.selected = NO;
     }
 }
 ///暂停
@@ -889,15 +970,9 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
     if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayerFinishedPlay:)]) {
         [self.delegate wmplayerFinishedPlay:self];
     }
-    [self.player seekToTime:kCMTimeZero toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-        if (finished) {
-            [self showControlView];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                self.state = WMPlayerStateFinished;
-                self.playOrPauseBtn.selected = YES;
-            });
-        }
-    }];
+    
+    self.state = WMPlayerStateFinished;
+    [self hideReplayView:NO];
 }
 ///显示操作栏view
 -(void)showControlView{
@@ -955,11 +1030,21 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                      it has not tried to load new media resources for playback */
                 case AVPlayerStatusUnknown:
                 {
-                    [self.loadingProgress setProgress:0.0 animated:NO];
-                    NSLog(@"%s WMPlayerStateBuffering",__FUNCTION__);
-
-                    self.state = WMPlayerStateBuffering;
-                    [self.loadingView startAnimating];
+                    AFNetworkReachabilityStatus status =
+                    [[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus];
+                    if (status == AFNetworkReachabilityStatusNotReachable) {
+                        [self pause];
+                        self.tipTitleLabel.text = @"貌似网络未连接，请检查网络设置后重试。";
+                         [self hideControls:YES];
+                        [self hideRetryView:NO];
+                    } else {
+                        [self.loadingProgress setProgress:0.0 animated:NO];
+                        NSLog(@"%s WMPlayerStateBuffering",__FUNCTION__);
+                        
+                        self.state = WMPlayerStateBuffering;
+                        [self.loadingView startAnimating];
+                    }
+                    
                 }
                     break;
                     
@@ -1009,18 +1094,15 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
                 {
                     self.state = WMPlayerStateFailed;
                     NSLog(@"%s WMPlayerStateFailed",__FUNCTION__);
-
+                    
                     if (self.delegate&&[self.delegate respondsToSelector:@selector(wmplayerFailedPlay:WMPlayerStatus:)]) {
                         [self.delegate wmplayerFailedPlay:self WMPlayerStatus:WMPlayerStateFailed];
                     }
-                    NSError *error = [self.player.currentItem error];
-                    if (error) {
-                        self.loadFailedLabel.hidden = NO;
-                        [self bringSubviewToFront:self.loadFailedLabel];
-                        //here
-                        [self.loadingView stopAnimating];
-                    }
-                    NSLog(@"视频加载失败===%@",error.description);
+                    self.tipTitleLabel.text = @"视频加载失败";
+                     [self hideControls:YES];
+                    [self hideRetryView:NO];
+                    //here
+                    [self.loadingView stopAnimating];
                 }
                     break;
             }
@@ -1047,10 +1129,19 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
             [self.loadingView startAnimating];
             // 当缓冲是空的时候
             if (self.currentItem.playbackBufferEmpty) {
-                self.state = WMPlayerStateBuffering;
-                NSLog(@"%s WMPlayerStateBuffering",__FUNCTION__);
-
-                [self loadedTimeRanges];
+                AFNetworkReachabilityStatus status =
+                [[AFNetworkReachabilityManager sharedManager] networkReachabilityStatus];
+                if (status == AFNetworkReachabilityStatusNotReachable) {
+                    [self pause];
+                    self.tipTitleLabel.text = @"貌似网络未连接，请检查网络设置后重试。";
+                    [self hideControls:YES];
+                    [self hideRetryView:NO];
+                } else {
+                    self.state = WMPlayerStateBuffering;
+                    NSLog(@"%s playbackBufferEmpty",__FUNCTION__);
+                    
+                    [self loadedTimeRanges];
+                }
             }
             
         } else if ([keyPath isEqualToString:@"playbackLikelyToKeepUp"]) {
@@ -1058,7 +1149,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
             [self.loadingView stopAnimating];
             // 当缓冲好的时候
             if (self.currentItem.playbackLikelyToKeepUp && self.state == WMPlayerStateBuffering){
-                NSLog(@"55555%s WMPlayerStatePlaying",__FUNCTION__);
+                NSLog(@"55555%s playbackLikelyToKeepUp",__FUNCTION__);
 
                 self.state = WMPlayerStatePlaying;
             }
@@ -1414,6 +1505,28 @@ NSString * calculateTimeWithTimeFormatter(long long timeSecond){
     }
     
 }
+
+#pragma mark - 隐藏或显示提示视图
+-(void)hideReplayView:(BOOL)hidden{
+    [self.tipView setHidden:hidden];
+    [self.replayButton setHidden:hidden];
+    [self.likeButton setHidden:hidden];
+    if (hidden == NO) {
+        [self.contentView bringSubviewToFront:self.tipView];
+    }
+}
+
+-(void)hideRetryView:(BOOL)hidden{
+    [self.tipView setHidden:hidden];
+    [self.retryButton setHidden:hidden];
+    [self.tipTitleLabel setHidden:hidden];
+    if (hidden == NO) {
+        [self.contentView bringSubviewToFront:self.tipView];
+    }
+}
+
+
+//
 
 //重置播放器
 -(void )resetWMPlayer{

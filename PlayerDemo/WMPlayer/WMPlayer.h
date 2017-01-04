@@ -74,6 +74,14 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
 -(void)wmplayerFinishedPlay:(WMPlayer *)wmplayer;
 
 
+///提示视图
+//点击重播按钮代理方法
+-(void)wmplayer:(WMPlayer *)wmplayer clickedReplayButton:(UIButton *)replayButton;
+//点击点赞按钮代理方法
+-(void)wmplayer:(WMPlayer *)wmplayer clickedLikeButton:(UIButton *)likeButton;
+//点击重试按钮代理方法
+-(void)wmplayer:(WMPlayer *)wmplayer clickedRetryButton:(UIButton *)retryButton;
+
 @end
 
 
@@ -146,17 +154,38 @@ typedef NS_ENUM(NSUInteger,WMControlType) {
  *  左上角关闭按钮
  */
 @property (nonatomic,retain ) UIButton       *closeBtn;
-/**
- *  显示加载失败的UILabel
- */
 
-@property (nonatomic,strong) UILabel        *loadFailedLabel;
 
 
 /**
  *  /给显示亮度的view添加毛玻璃效果
  */
 @property (nonatomic, strong) UIVisualEffectView * effectView;
+
+
+/**
+ *  提示视图
+ */
+@property (nonatomic, strong) UIView *tipView;
+/**
+ *  提示文字
+ */
+@property (nonatomic, strong) UILabel *tipTitleLabel;
+
+/**
+ *  点赞按钮
+ */
+@property (nonatomic, strong) UIButton *likeButton;
+/**
+ *  重播按钮
+ */
+@property (nonatomic, strong) UIButton *replayButton;
+/**
+ *  重试按钮
+ */
+@property (nonatomic, strong) UIButton *retryButton;
+
+
 /**
  *  wmPlayer内部一个UIView，所有的控件统一管理在此view中
  */

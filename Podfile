@@ -9,5 +9,5 @@ target 'PlayerDemo' do
     # Pods for PlayerDemo
 
     pod 'Masonry'
-
+    pod 'AFNetworking'
 end

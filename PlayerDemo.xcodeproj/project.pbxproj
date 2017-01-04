@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		701570961E067CC700632595 /* WMDragView.m in Sources */ = {isa = PBXBuildFile; fileRef = 701570951E067CC700632595 /* WMDragView.m */; };
 		701C246A1E0844C600232AAB /* WMPlayer.gif in Resources */ = {isa = PBXBuildFile; fileRef = 701C24691E0844C600232AAB /* WMPlayer.gif */; };
+		BE1CD9E71E1BC73C00CEA501 /* UIButton+WMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1CD9E61E1BC73C00CEA501 /* UIButton+WMPlayer.m */; };
 		BECD49CE1E163CA10012CEF6 /* FullView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECD49CB1E163CA10012CEF6 /* FullView.m */; };
 		BECD49CF1E163CA10012CEF6 /* FullViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECD49CD1E163CA10012CEF6 /* FullViewController.m */; };
 		BF1624601DF50011006209D1 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1623B81DF50011006209D1 /* DataManager.m */; };
@@ -103,6 +104,8 @@
 		701C24691E0844C600232AAB /* WMPlayer.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = WMPlayer.gif; sourceTree = "<group>"; };
 		A41F0B6E980617F314AD7227 /* Pods-PlayerDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayerDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-PlayerDemo/Pods-PlayerDemo.release.xcconfig"; sourceTree = "<group>"; };
 		AD4E1C1A77CA0A18F1DFB6AE /* Pods-PlayerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayerDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PlayerDemo/Pods-PlayerDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		BE1CD9E51E1BC73C00CEA501 /* UIButton+WMPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+WMPlayer.h"; sourceTree = "<group>"; };
+		BE1CD9E61E1BC73C00CEA501 /* UIButton+WMPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+WMPlayer.m"; sourceTree = "<group>"; };
 		BECD49CA1E163CA10012CEF6 /* FullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullView.h; sourceTree = "<group>"; };
 		BECD49CB1E163CA10012CEF6 /* FullView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullView.m; sourceTree = "<group>"; };
 		BECD49CC1E163CA10012CEF6 /* FullViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullViewController.h; sourceTree = "<group>"; };
@@ -525,6 +528,8 @@
 				BECD49CB1E163CA10012CEF6 /* FullView.m */,
 				BECD49CC1E163CA10012CEF6 /* FullViewController.h */,
 				BECD49CD1E163CA10012CEF6 /* FullViewController.m */,
+				BE1CD9E51E1BC73C00CEA501 /* UIButton+WMPlayer.h */,
+				BE1CD9E61E1BC73C00CEA501 /* UIButton+WMPlayer.m */,
 			);
 			name = WMPlayer;
 			path = PlayerDemo/WMPlayer;
@@ -776,6 +781,7 @@
 				BF1624C71DF50182006209D1 /* WMPlayer.m in Sources */,
 				BF1624931DF50011006209D1 /* MJRefreshStateHeader.m in Sources */,
 				BF16248F1DF50011006209D1 /* MJRefreshBackNormalFooter.m in Sources */,
+				BE1CD9E71E1BC73C00CEA501 /* UIButton+WMPlayer.m in Sources */,
 				BF1624A01DF50011006209D1 /* SDWebImageManager.m in Sources */,
 				BF16249B1DF50011006209D1 /* SDImageCache.m in Sources */,
 				BF1624971DF50011006209D1 /* UIScrollView+MJRefresh.m in Sources */,
