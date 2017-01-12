@@ -11,7 +11,7 @@
  Copyright © 2016年 郑文明. All rights reserved.
  */
 #import <Masonry/Masonry.h>
-#import "FullViewController.h"
+#import "WMFullViewController.h"
 #import "UIButton+WMPlayer.h"
 #import "AFNetworking.h"
 
@@ -87,7 +87,7 @@ static void *PlayViewStatusObservationContext = &PlayViewStatusObservationContex
 
 
 /* 全屏控制器 */
-@property(nonatomic, strong) FullViewController *fullVC;
+@property(nonatomic, strong) WMFullViewController *fullVC;
 @property(strong, nonatomic) UIView *currentSuperView;
 @property(assign, nonatomic) CGRect originFrame;
 
@@ -1636,9 +1636,9 @@ NSString * calculateTimeWithTimeFormatter(long long timeSecond){
     self.player.muted = mute;
 }
 
-- (FullViewController *)fullVC {
+- (WMFullViewController *)fullVC {
     if (_fullVC == nil) {
-        _fullVC = [[FullViewController alloc] init];
+        _fullVC = [[WMFullViewController alloc] init];
     }
     return _fullVC;
 }

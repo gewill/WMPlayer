@@ -10,8 +10,8 @@
 		701570961E067CC700632595 /* WMDragView.m in Sources */ = {isa = PBXBuildFile; fileRef = 701570951E067CC700632595 /* WMDragView.m */; };
 		701C246A1E0844C600232AAB /* WMPlayer.gif in Resources */ = {isa = PBXBuildFile; fileRef = 701C24691E0844C600232AAB /* WMPlayer.gif */; };
 		BE1CD9E71E1BC73C00CEA501 /* UIButton+WMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BE1CD9E61E1BC73C00CEA501 /* UIButton+WMPlayer.m */; };
-		BECD49CE1E163CA10012CEF6 /* FullView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECD49CB1E163CA10012CEF6 /* FullView.m */; };
-		BECD49CF1E163CA10012CEF6 /* FullViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECD49CD1E163CA10012CEF6 /* FullViewController.m */; };
+		BECD49CE1E163CA10012CEF6 /* WMFullView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECD49CB1E163CA10012CEF6 /* WMFullView.m */; };
+		BECD49CF1E163CA10012CEF6 /* WMFullViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECD49CD1E163CA10012CEF6 /* WMFullViewController.m */; };
 		BF1624601DF50011006209D1 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1623B81DF50011006209D1 /* DataManager.m */; };
 		BF1624611DF50011006209D1 /* SidModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1623BA1DF50011006209D1 /* SidModel.m */; };
 		BF1624621DF50011006209D1 /* VideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BF1623BC1DF50011006209D1 /* VideoModel.m */; };
@@ -106,10 +106,10 @@
 		AD4E1C1A77CA0A18F1DFB6AE /* Pods-PlayerDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayerDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PlayerDemo/Pods-PlayerDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		BE1CD9E51E1BC73C00CEA501 /* UIButton+WMPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+WMPlayer.h"; sourceTree = "<group>"; };
 		BE1CD9E61E1BC73C00CEA501 /* UIButton+WMPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+WMPlayer.m"; sourceTree = "<group>"; };
-		BECD49CA1E163CA10012CEF6 /* FullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullView.h; sourceTree = "<group>"; };
-		BECD49CB1E163CA10012CEF6 /* FullView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullView.m; sourceTree = "<group>"; };
-		BECD49CC1E163CA10012CEF6 /* FullViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullViewController.h; sourceTree = "<group>"; };
-		BECD49CD1E163CA10012CEF6 /* FullViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullViewController.m; sourceTree = "<group>"; };
+		BECD49CA1E163CA10012CEF6 /* WMFullView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMFullView.h; sourceTree = "<group>"; };
+		BECD49CB1E163CA10012CEF6 /* WMFullView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMFullView.m; sourceTree = "<group>"; };
+		BECD49CC1E163CA10012CEF6 /* WMFullViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMFullViewController.h; sourceTree = "<group>"; };
+		BECD49CD1E163CA10012CEF6 /* WMFullViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMFullViewController.m; sourceTree = "<group>"; };
 		BF1623B71DF50011006209D1 /* DataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataManager.h; sourceTree = "<group>"; };
 		BF1623B81DF50011006209D1 /* DataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataManager.m; sourceTree = "<group>"; };
 		BF1623B91DF50011006209D1 /* SidModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SidModel.h; sourceTree = "<group>"; };
@@ -524,10 +524,10 @@
 				BF1624C01DF50182006209D1 /* WMPlayer.bundle */,
 				BF1624C11DF50182006209D1 /* WMPlayer.h */,
 				BF1624C21DF50182006209D1 /* WMPlayer.m */,
-				BECD49CA1E163CA10012CEF6 /* FullView.h */,
-				BECD49CB1E163CA10012CEF6 /* FullView.m */,
-				BECD49CC1E163CA10012CEF6 /* FullViewController.h */,
-				BECD49CD1E163CA10012CEF6 /* FullViewController.m */,
+				BECD49CA1E163CA10012CEF6 /* WMFullView.h */,
+				BECD49CB1E163CA10012CEF6 /* WMFullView.m */,
+				BECD49CC1E163CA10012CEF6 /* WMFullViewController.h */,
+				BECD49CD1E163CA10012CEF6 /* WMFullViewController.m */,
 				BE1CD9E51E1BC73C00CEA501 /* UIButton+WMPlayer.h */,
 				BE1CD9E61E1BC73C00CEA501 /* UIButton+WMPlayer.m */,
 			);
@@ -758,7 +758,7 @@
 				BF1624A81DF50011006209D1 /* RootTabBarController.m in Sources */,
 				BF1624861DF50011006209D1 /* MJRefreshAutoFooter.m in Sources */,
 				BF1624991DF50011006209D1 /* ScreenShotView.m in Sources */,
-				BECD49CF1E163CA10012CEF6 /* FullViewController.m in Sources */,
+				BECD49CF1E163CA10012CEF6 /* WMFullViewController.m in Sources */,
 				BF1624A31DF50011006209D1 /* UIImage+GIF.m in Sources */,
 				BF16249F1DF50011006209D1 /* SDWebImageDownloaderOperation.m in Sources */,
 				BF1624A91DF50011006209D1 /* VideoCell.m in Sources */,
@@ -792,7 +792,7 @@
 				BF1624AB1DF50011006209D1 /* BaseNavigationController.m in Sources */,
 				BF16248D1DF50011006209D1 /* MJRefreshAutoStateFooter.m in Sources */,
 				BF1624871DF50011006209D1 /* MJRefreshBackFooter.m in Sources */,
-				BECD49CE1E163CA10012CEF6 /* FullView.m in Sources */,
+				BECD49CE1E163CA10012CEF6 /* WMFullView.m in Sources */,
 				BF1624911DF50011006209D1 /* MJRefreshGifHeader.m in Sources */,
 				BF16249D1DF50011006209D1 /* SDWebImageDecoder.m in Sources */,
 				BF1624831DF50011006209D1 /* MBProgressHUD+Show.m in Sources */,

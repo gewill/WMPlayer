@@ -1,24 +1,24 @@
 //
-//  FullViewController.m
+//  WMFullViewController.m
 //  网络视频播放(AVPlayer)
 //
 //  Created by apple on 15/8/16.
 //  Copyright (c) 2015年 FMG. All rights reserved.
 //
 
-#import "FullView.h"
-#import "FullViewController.h"
+#import "WMFullView.h"
+#import "WMFullViewController.h"
 
-@interface FullViewController ()
+@interface WMFullViewController ()
 
 @property(nonatomic, unsafe_unretained) BOOL preferHide;
 
 @end
 
-@implementation FullViewController
+@implementation WMFullViewController
 
 - (void)loadView {
-  FullView *fullView = [[FullView alloc] init];
+  WMFullView *fullView = [[WMFullView alloc] init];
   self.view = fullView;
 }
 
@@ -28,7 +28,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"dealloc FMGVideoPlayView —> FullViewController");
+    NSLog(@"dealloc FMGVideoPlayView —> WMFullViewController");
 }
 
 - (void)viewWillAppear:(BOOL)animated {

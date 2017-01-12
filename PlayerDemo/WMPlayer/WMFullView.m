@@ -1,15 +1,15 @@
 //
-//  FullView.m
+//  WMFullView.m
 //  网络视频播放(AVPlayer)
 //
 //  Created by apple on 15/8/26.
 //  Copyright (c) 2015年 FMG. All rights reserved.
 //
 
-#import "FullView.h"
+#import "WMFullView.h"
 #import <Masonry/Masonry.h>
 
-@implementation FullView
+@implementation WMFullView
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -24,7 +24,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"dealloc FMGVideoPlayView —> FullView");
+    NSLog(@"dealloc FMGVideoPlayView —> WMFullView");
 }
 
 @end
